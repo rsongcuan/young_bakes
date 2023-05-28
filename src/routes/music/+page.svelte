@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import { musicList } from './musiclist';
 	import Header from '../Header.svelte';
+	import { AccordionItem, Accordion, Avatar, Hr, Layout, P } from 'flowbite-svelte';
+	import { CheckCircle } from 'svelte-heros-v2';
 	// import {} from '../../'
 
 	let currentAlbumIndex = 0;
@@ -95,14 +97,16 @@
 		src={`../../../files/audio/${$musicList[currentAlbumIndex].songs[currentSongIndex].audio}`}
 		bind:this={audioElement}
 	/>
+
 	<div class="player">
 		<div class="current-song">
 			<div class="avatar">
 				<img src={`../../../files/images/${$musicList[currentAlbumIndex].image}`} alt="Album Art" />
 			</div>
 			<div class="song-controls">
-				<h2>{$musicList[currentAlbumIndex].songs[currentSongIndex].name}</h2>
-				<p>{$musicList[currentAlbumIndex].songs[currentSongIndex].artist}</p>
+				<P size="2xl">{$musicList[currentAlbumIndex].songs[currentSongIndex].name}</P>
+				<P style="padding:4px 0 4px 0">{$musicList[currentAlbumIndex].album}</P>
+				<P>{$musicList[currentAlbumIndex].songs[currentSongIndex].artist}</P>
 				<div class="controls">
 					<button on:click={prev}>
 						<i class="fa fa-backward" />
@@ -121,33 +125,83 @@
 			</div>
 		</div>
 		<div class="album-list">
-			{#each $musicList as album, i}
+			<Accordion
+				activeClasses="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-white focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800"
+				inactiveClasses="text-white hover:text-gray-500 dark:text-gray-400 hover:bg-gray-100 hover:dark:bg-gray-800"
+			>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
-				<div class="album" class:active={listIsShowing} on:click={() => setAlbum(i)}>
-					<div class="avatar">
-						<img src={`../../../files/images/${album.image}`} alt="Album Art" />
-					</div>
-					<div class="album-details">
-						<h2>{album.album}</h2>
-					</div>
-				</div>
-				{#if i === currentAlbumIndex}
-					{#each $musicList[currentAlbumIndex].songs as music, j}
-						<div class="song-list" class:show-list={listIsShowing}>
-							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<div
-								class={j == currentSongIndex ? 'song active' : 'song'}
-								on:click={() => setSong(j)}
-							>
-								<div class="song-details">
-									<h2>{music.name}</h2>
-									<p>{music.artist}</p>
+				{#each $musicList as album, i}
+					<div class:active={listIsShowing} on:click={() => setAlbum(i)}>
+						<AccordionItem
+							activeClasses="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-white focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800"
+							inactiveClasses="text-white hover:text-gray-500 dark:text-gray-400 hover:bg-gray-100 hover:dark:bg-gray-800"
+						>
+							<span slot="arrowup">
+								<svg
+									class="w-6 h-6 shrink-0 rotate-180"
+									fill="gray"
+									stroke="white"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
+									/>
+								</svg>
+							</span>
+							<span slot="arrowdown">
+								<svg
+									class="w-6 h-6 shrink-0"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
+									/>
+								</svg>
+							</span>
+							<span slot="header" class="text-base flex gap-5">
+								<Avatar
+									src={album.image ? `../../../files/images/${album.image}` : ''}
+									rounded
+									size="lg"
+								/>
+								<span style="padding-top:25px;">{album.album}</span>
+							</span>
+							{#each $musicList[currentAlbumIndex].songs as music, j}
+								<!-- svelte-ignore a11y-click-events-have-key-events -->
+								<div
+									class={j == currentSongIndex ? 'song active' : 'song'}
+									on:click={() => setSong(j)}
+								>
+									<Layout gap={6} cols="grid-cols-1 sm:grid-cols-8">
+										{#if j == currentSongIndex}
+											<div style="padding-top:15px">
+												<CheckCircle size="25" />
+											</div>
+										{/if}
+										<div class="col-span-7">
+											<p class="text-xl dark:text-white">{music.name}</p>
+											<p class="text-l dark:text-white">{music.artist}</p>
+										</div>
+									</Layout>
+									{#if j !== $musicList[currentAlbumIndex].songs.length - 1}
+										<Hr />
+									{/if}
 								</div>
-							</div>
-						</div>
-					{/each}
-				{/if}
-			{/each}
+							{/each}
+						</AccordionItem>
+					</div>
+				{/each}
+			</Accordion>
 		</div>
 	</div>
 </div>
@@ -198,16 +252,17 @@
 		padding-left: 10px;
 		flex: 1;
 	}
-	.player .current-song .song-controls h2 {
+	/* .player .current-song .song-controls h2 {
 		margin-bottom: 15px;
 		font-size: 20px;
 		color: #111;
-	}
+	} */
 	.player .current-song .song-controls .controls {
 		display: flex;
 		justify-content: space-between;
 		padding-top: 10px;
 		padding-right: 40px;
+		margin-bottom: 10px;
 	}
 	.player .current-song .song-controls .controls button {
 		outline: none;
@@ -238,15 +293,20 @@
 		border-bottom: 0.5px solid rgba(255, 255, 255, 0.25);
 		cursor: pointer;
 	}
-
-	.album {
-		display: flex;
-	}
 	.song.active {
-		backdrop-filter: blur(50px);
-		background: rgba(255, 255, 255, 0.25);
+		/* backdrop-filter: blur(50px); */
+		color: white;
 	}
-	.player .album-list > div .avatar {
+	.song {
+		color: #cccccc;
+		padding: 5px;
+	}
+	.song:hover {
+		color: yellow;
+		cursor: pointer;
+	}
+
+	/* .player .album-list > div .avatar {
 		width: 50px;
 		height: 50px;
 		text-align: center;
@@ -257,44 +317,5 @@
 		height: 100%;
 		border-radius: 10%;
 		object-fit: cover;
-	}
-	.player .album-list > div .album-details {
-		padding: 10px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
-	.player .album-list > div .album-details h2 {
-		font-size: 16px;
-		margin: 5px 0px 2px;
-		color: #fff;
-	}
-	.song-list {
-		height: 0;
-		opacity: 0;
-		translate: translateY(-50px);
-	}
-	.show-list {
-		height: auto;
-		opacity: 1;
-		translate: translateY(0);
-	}
-	.song-list:hover {
-		background-color: transparent;
-	}
-	.player .song-list > div .song-details {
-		padding-left: 10px;
-		display: list-item;
-		justify-content: center;
-	}
-	.player .song-list > div .song-details h2 {
-		font-size: 16px;
-		margin: 5px;
-		color: #fff;
-	}
-	.player .song-list > div .song-details p {
-		color: #eee;
-		font-size: 15px;
-		margin: 5px;
-	}
+	} */
 </style>
