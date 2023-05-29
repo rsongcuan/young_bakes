@@ -1,7 +1,11 @@
 <script>
 	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
-	import github from '$lib/images/github.svg';
+	import { SpeedDial, SpeedDialButton } from 'flowbite-svelte';
+	import Icon from 'svelte-awesome';
+
+	// Icons
+	import facebookOfficial from 'svelte-awesome/icons/facebookOfficial';
+	import soundcloud from 'svelte-awesome/icons/soundcloud';
 </script>
 
 <header>
@@ -35,9 +39,25 @@
 	</nav>
 
 	<div class="corner">
-		<!-- <a href="https://github.com/sveltejs/kit">
-			<img src={github} alt="GitHub" />
-		</a> -->
+		<SpeedDial
+			shadow="red"
+			gradient
+			color="red"
+			defaultClass="fixed right-6 bottom-70"
+			pill={false}
+			placement="bottom"
+		>
+			<SpeedDialButton
+				name="Facebook"
+				href="https://www.facebook.com/profile.php?id=100062810091585"
+				target="blank"
+			>
+				<Icon data={facebookOfficial} scale={4} />
+			</SpeedDialButton>
+			<SpeedDialButton name="Soundcloud" href="https://soundcloud.com/slimjordan" target="blank">
+				<Icon data={soundcloud} scale={4} />
+			</SpeedDialButton>
+		</SpeedDial>
 	</div>
 </header>
 
@@ -48,23 +68,22 @@
 	}
 
 	.corner {
-		width: 3em;
-		height: 3em;
+		padding-top: 5px;
 	}
 
-	.corner a {
+	/* .corner a {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		width: 100%;
 		height: 100%;
-	}
+	} */
 
-	.corner img {
+	/* .corner img {
 		width: 2em;
 		height: 2em;
 		object-fit: contain;
-	}
+	} */
 
 	nav {
 		display: flex;

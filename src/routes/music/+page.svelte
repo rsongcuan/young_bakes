@@ -3,8 +3,12 @@
 	import { musicList } from './musiclist';
 	import Header from '../Header.svelte';
 	import { AccordionItem, Accordion, Avatar, Hr, Layout, P } from 'flowbite-svelte';
-	import { CheckCircle } from 'svelte-heros-v2';
-	// import {} from '../../'
+	import Icon from 'svelte-awesome';
+
+	// Icons
+	import checkCircleO from 'svelte-awesome/icons/checkCircleO';
+	import chevronDown from 'svelte-awesome/icons/chevronDown';
+	import chevronCircleUp from 'svelte-awesome/icons/chevronCircleUp';
 
 	let currentAlbumIndex = 0;
 	let currentSongIndex = 0;
@@ -136,37 +140,11 @@
 							activeClasses="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-white focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800"
 							inactiveClasses="text-white hover:text-gray-500 dark:text-gray-400 hover:bg-gray-100 hover:dark:bg-gray-800"
 						>
-							<span slot="arrowup">
-								<svg
-									class="w-6 h-6 shrink-0 rotate-180"
-									fill="gray"
-									stroke="white"
-									viewBox="0 0 24 24"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-									/>
-								</svg>
-							</span>
 							<span slot="arrowdown">
-								<svg
-									class="w-6 h-6 shrink-0"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z"
-									/>
-								</svg>
+								<Icon data={chevronDown} scale={1.25} />
+							</span>
+							<span slot="arrowup">
+								<Icon data={chevronCircleUp} scale={1.5} />
 							</span>
 							<span slot="header" class="text-base flex gap-5">
 								<Avatar
@@ -182,13 +160,13 @@
 									class={j == currentSongIndex ? 'song active' : 'song'}
 									on:click={() => setSong(j)}
 								>
-									<Layout gap={6} cols="grid-cols-1 sm:grid-cols-8">
+									<Layout gap={6} cols="grid-cols-1 sm:grid-cols-12">
 										{#if j == currentSongIndex}
 											<div style="padding-top:15px">
-												<CheckCircle size="25" />
+												<Icon data={checkCircleO} />
 											</div>
 										{/if}
-										<div class="col-span-7">
+										<div class={j == currentSongIndex ? 'col-span-11' : 'col-span-12'}>
 											<p class="text-xl dark:text-white">{music.name}</p>
 											<p class="text-l dark:text-white">{music.artist}</p>
 										</div>
